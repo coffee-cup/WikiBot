@@ -51,4 +51,4 @@ var Wiki = require('./wiki/wiki.js');
 
 // Wiki.getRandomFact().then(function(fact) {
 //     console.log(fact);
-// });
+/// });
