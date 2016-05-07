@@ -1,0 +1,19 @@
+{
+  "name": "wiki-bot",
+  "version": "0.0.1",
+  "description": "Slack bot to get random facts from Wikipedia",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "cheerio": "^0.20.0",
+    "morgan": "^1.7.0",
+    "request": "^2.72.0",
+    "restify": "^4.0.4"
+  }
+}
