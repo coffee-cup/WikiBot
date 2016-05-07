@@ -34,7 +34,7 @@ server.post('/fakt', restify.bodyParser(), function(req, res) {
 });
 
 // Add a GET handler for `/beepboop` route that Slack expects to be present
-server.get('/beepboop', function(req, res) {
+server.get('/fakt', function(req, res) {
     res.send(200, 'Ok');
 });
 
