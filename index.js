@@ -1,37 +1,53 @@
 'use strict'
 
-var botkit = require('botkit');
-var logger = require('morgan');
+var restify = require('restify')
+var logger = require('morgan')
 
-// Beep Boop specifies the port you should listen on default to 8080 for local dev
-var PORT = process.env.PORT || 8080
+var slash_command = '/fakt';
 
-var controller = botkit.slackbot()
+var VERIFY_TOKEN = process.env.SLACK_VERIFY_TOKEN;
+if (!VERIFY_TOKEN) {
+    console.error('SLACK_VERIFY_TOKEN is required');
+    process.exit(1);
+}
+// Use Beep Boop provided PORT - default to 8080 for dev
+var PORT = process.env.PORT || 8080;
 
-require('beepboop-botkit').start(controller, {
-    debug: true
-})
+var server = restify.createServer();
+server.use(logger('tiny'));
 
-controller.setupWebserver(PORT, function(err, webserver) {
+// Add a `/beepboop` route handler for `/beepboop` slash command
+server.post(slash_command, restify.bodyParser(), function(req, res) {
+    if (req.params.token !== VERIFY_TOKEN) {
+        return res.send(401, 'Unauthorized');
+    }
+
+    var message = 'boopbeep';
+
+    // Handle any help requests
+    if (req.params.text === 'help') {
+        message = "Sorry, I can't offer much help, just here to beep and boop";
+    }
+
+    res.send({
+        response_type: 'ephemeral',
+        text: message
+    });
+});
+
+// Add a GET handler for slash_command route that Slack expects to be present
+server.get(slash_command, function(req, res) {
+    res.send(200, 'Ok');
+});
+
+// 🔥 it up
+server.listen(PORT, function(err) {
     if (err) {
-        console.error(err)
-        process.exit(1)
+        return console.error('Error starting server: ', err);
     }
 
-    webserver.use(logger('tiny'))
-        // Setup our slash command webhook endpoints
-    controller.createWebhookEndpoints(webserver)
-})
-
-controller.on('slash_command', function(bot, message) {
-    switch (message.command) {
-        case '/fakt':
-            bot.reply(message, 'lkhlkhklh')
-            break
-        default:
-            bot.replyPrivate(message, "Sorry, I'm not sure what that command is")
-    }
-})
+    console.log('Server successfully started on port %s', PORT);
+});
 
 var Wiki = require('./wiki/wiki.js');
 
