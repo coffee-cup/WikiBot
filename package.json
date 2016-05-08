@@ -17,6 +17,6 @@
     "morgan": "^1.7.0",
     "request": "^2.72.0",
     "restify": "^4.0.4",
-    "wikifakt": "^1.0.0"
+    "wikifakt": "^1.0.1"
   }
 }
