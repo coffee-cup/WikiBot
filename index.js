@@ -1,7 +1,9 @@
 'use strict'
 
-var restify = require('restify')
-var logger = require('morgan')
+var restify = require('restify');
+var logger = require('morgan');
+
+var Wiki = require('./wiki/wiki.js');
 
 var slash_command = '/fakt';
 
@@ -22,16 +24,18 @@ server.post(slash_command, restify.bodyParser(), function(req, res) {
         return res.send(401, 'Unauthorized');
     }
 
-    var message = 'boopbeep';
+    Wiki.getRandomFact().then(function(fact) {
+        var message = fact;
 
-    // Handle any help requests
-    if (req.params.text === 'help') {
-        message = "Sorry, I can't offer much help, just here to beep and boop";
-    }
+        // Handle any help requests
+        if (req.params.text === 'help') {
+            message = 'Type ' + slash_command + ' to get a random fact from Wikipedia';
+        }
 
-    res.send(200, {
-        response_type: 'ephemeral',
-        text: message
+        res.send(200, {
+            response_type: 'in_channel',
+            text: message
+        });
     });
 });
 
@@ -48,9 +52,3 @@ server.listen(PORT, function(err) {
 
     console.log('Server successfully started on port %s', PORT);
 });
-
-var Wiki = require('./wiki/wiki.js');
-
-// Wiki.getRandomFact().then(function(fact) {
-//     console.log(fact);
-/// });
