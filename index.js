@@ -2,8 +2,7 @@
 
 var restify = require('restify');
 var logger = require('morgan');
-
-var Wiki = require('./wiki/wiki.js');
+var WikiFakt = require('wikifakt');
 
 var slash_command = '/fakt';
 
@@ -24,7 +23,7 @@ server.post(slash_command, restify.bodyParser(), function(req, res) {
         return res.send(401, 'Unauthorized');
     }
 
-    Wiki.getRandomFact().then(function(fact) {
+    WikiFakt.getRandomFact().then(function(fact) {
         var message = fact;
 
         // Handle any help requests
