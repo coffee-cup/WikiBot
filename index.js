@@ -29,7 +29,7 @@ server.post(slash_command, restify.bodyParser(), function(req, res) {
         message = "Sorry, I can't offer much help, just here to beep and boop";
     }
 
-    res.send({
+    res.send(200, {
         response_type: 'ephemeral',
         text: message
     });
